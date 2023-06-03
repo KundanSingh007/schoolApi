@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ScienceController {
 	
 	@Autowired
+	private HttpServletRequest request;
+	
+	@Autowired
 	private ScienceService scienceService;
 	
 	@Operation(summary = "This is to fetch the details of Science Student")
@@ -37,9 +41,10 @@ public class ScienceController {
 	@ApiResponse(responseCode = "200", description = "Details of All the Science Student", content = {
 	@Content(mediaType = "application/json") }) })
 	@GetMapping("/science-student")
-	List<ScienceBean> fetchAllAgentLoc() {
-
+	List<ScienceBean> fetchAllScienceStudents() {
+		log.info("Searching for all science class with the ip: "+request.getRemoteAddr());
 		return scienceService.getAllScience();
+		
 	}
 
 	
@@ -56,22 +61,22 @@ public class ScienceController {
 	@Operation(summary = "This is to Create new cience Student on the basis of ID")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Create Science Student on the Basis of Id associated with School", content = {@Content(mediaType = "application/json") }) })
 	@PostMapping("/science-student/create")
-	public ScienceBean addVisaServiceMaster(@Valid @RequestBody ScienceBean scienceBean) {
+	public ScienceBean addScienceStudent(@Valid @RequestBody ScienceBean scienceBean) {
 		System.out.println("You ar adding:" + scienceBean);
-		//System.out.println("getRemoteHost--Ip:" + request.getRemoteHost());
-		//System.out.println("getRemoteAddr--Ip:" + request.getRemoteAddr());
+		System.out.println("getRemoteHost--Ip:" + request.getRemoteHost());
+		System.out.println("getRemoteAddr--Ip:" + request.getRemoteAddr());
 		return scienceService.addScienceStudent(scienceBean);
 	}
 
-	@Operation(summary = "This is to Update the a details of Service associated with CONSPROM on the basis of ID")
+	@Operation(summary = "This is to Update the a details of Single Student associated with School on the basis of ID")
 	@ApiResponses(value = {
-	@ApiResponse(responseCode = "200", description = "Update the Details of the Single Service on the Basis of Id associated with CONSPROM", content = {
+	@ApiResponse(responseCode = "200", description = "Update the Details of the Single Student the Basis of Id associated with School", content = {
 	@Content(mediaType = "application/json") }) })
 	@PutMapping("/science-student/update/{id}")
-	public ResponseEntity<ScienceBean> update(@Valid @PathVariable String Id,@RequestBody ScienceBean scienceBean) {
+	public ResponseEntity<ScienceBean> updateStudent(@Valid @PathVariable String Id,@RequestBody ScienceBean scienceBean) {
 		System.out.println("Updating data for Id:" + Id);
-		//System.out.println("getting data:" + visaServiceMasterBean);
-		//System.out.println("Ip:" + request.getRemoteHost());
+		System.out.println("getting data:" + scienceBean);
+		System.out.println("Ip:" + request.getRemoteHost());
 		return new ResponseEntity<ScienceBean>(scienceService.updateScienceStudent(scienceBean, Id),HttpStatus.OK);
 	}
 
